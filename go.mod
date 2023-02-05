@@ -1,4 +1,4 @@
-module github.com/hougesen/clipboard-url-saver
+module github.com/hougesen/clipurl
 
 go 1.18
 
