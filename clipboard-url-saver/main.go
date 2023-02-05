@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"fmt"
 	"os"
+	"path/filepath"
 	"regexp"
 	"time"
 
@@ -16,6 +17,8 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
+
+	setupDirectory()
 
 	ticker := time.NewTicker(time.Second)
 
@@ -43,6 +46,16 @@ func main() {
 
 	for range ticker.C {
 	}
+}
+
+func getDirectoryPath() string {
+	home_dir, _ := os.UserHomeDir()
+
+	return filepath.Join(home_dir, "clipboard_urls")
+}
+
+func setupDirectory() {
+	_ = os.Mkdir(getDirectoryPath(), os.ModePerm)
 }
 
 func getClipboard() []byte {
@@ -79,7 +92,11 @@ func findUrls(text string) []string {
 }
 
 func updateSavedUrls(urls []string) {
-	f, err := os.OpenFile("clipboard_urls.txt", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+	setupDirectory()
+
+	path := filepath.Join(getDirectoryPath(), "urls.txt")
+
+	f, err := os.OpenFile(path, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
 
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "error: %v\n", err)
@@ -93,5 +110,4 @@ func updateSavedUrls(urls []string) {
 	for _, url := range urls {
 		f.WriteString(fmt.Sprintf("%d %s\n", timestamp, url))
 	}
-
 }
