@@ -44,6 +44,15 @@ func main() {
 					return nil
 				},
 			},
+			{
+				Name:    "clean",
+				Aliases: []string{},
+				Usage:   "Removes all saved urls",
+				Action: func(ctx *cli.Context) error {
+					cleanHistory()
+					return nil
+				},
+			},
 		},
 		CommandNotFound: func(cCtx *cli.Context, command string) {
 			fmt.Fprintf(cCtx.App.Writer, "Command %q not found.\n", command)
@@ -168,4 +177,14 @@ func urlHistory() {
 	if err == nil && len(f) > 0 {
 		fmt.Print(string(f))
 	}
+}
+
+func cleanHistory() {
+	setupDirectory()
+
+	path := filepath.Join(getDirectoryPath(), "urls.txt")
+
+	f, _ := os.Create(path)
+
+	defer f.Close()
 }
