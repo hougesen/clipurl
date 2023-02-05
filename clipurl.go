@@ -29,7 +29,7 @@ func main() {
 			{
 				Name:    "start",
 				Aliases: []string{"listen", "watch"},
-				Usage:   "listens to clipboard",
+				Usage:   "Start listening to clipboard",
 				Action: func(cCtx *cli.Context) error {
 					listenToClipboard()
 					return nil
