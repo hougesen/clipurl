@@ -7,8 +7,10 @@ import (
 	"os"
 	"path/filepath"
 	"regexp"
+	"strings"
 	"time"
 
+	"github.com/jedib0t/go-pretty/v6/table"
 	"github.com/urfave/cli/v2"
 	"golang.design/x/clipboard"
 )
@@ -175,7 +177,24 @@ func urlHistory() {
 	f, err := os.ReadFile(path)
 
 	if err == nil && len(f) > 0 {
-		fmt.Print(string(f))
+		lines := strings.Split((string(f)), "\n")
+
+		t := table.NewWriter()
+		t.SetOutputMirror(os.Stdout)
+		t.AppendHeader(table.Row{"Timestamp", "URL"})
+
+		for _, line := range lines {
+			split_line := strings.Fields(line)
+
+			if len(split_line) >= 2 {
+				t.AppendRow(table.Row{split_line[0], split_line[1]})
+				t.AppendSeparator()
+			}
+		}
+
+		if t.Length() > 0 {
+			t.Render()
+		}
 	}
 }
 
