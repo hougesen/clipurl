@@ -1,18 +1,52 @@
 package main
 
 import (
+	"bytes"
 	"fmt"
 	"os"
 	"regexp"
 	"time"
+
+	"golang.design/x/clipboard"
 )
 
 func main() {
-	fmt.Println("masd")
+	err := clipboard.Init()
+
+	if err != nil {
+		panic(err)
+	}
+
+	ticker := time.NewTicker(time.Second)
+
+	last_clipboard_check := []byte{}
+
+	go func() {
+		for range ticker.C {
+			current_clipboard := getClipboard()
+
+			comparison := bytes.Compare(last_clipboard_check, current_clipboard)
+
+			if comparison != 0 {
+				clipboard_text := string(current_clipboard)
+
+				urls := findUrls(clipboard_text)
+
+				if len(urls) > 0 {
+					updateSavedUrls(urls)
+				}
+
+				last_clipboard_check = current_clipboard
+			}
+		}
+	}()
+
+	for range ticker.C {
+	}
 }
 
-func checkClipboard() {
-
+func getClipboard() []byte {
+	return clipboard.Read(clipboard.FmtText)
 }
 
 func findUrls(text string) []string {
