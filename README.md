@@ -1,4 +1,4 @@
-# clipboard-url-saver
+# clipurl
 
 Automatically save urls found in clipboard to file.
 
