@@ -46,3 +46,11 @@ To get a list of all found urls run
 ```sh
 clipurl history
 ```
+
+### Deleting all found urls
+
+To delete all found urls run
+
+```sh
+clipurl clean
+```

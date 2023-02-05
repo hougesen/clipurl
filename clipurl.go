@@ -29,7 +29,7 @@ func main() {
 			{
 				Name:    "start",
 				Aliases: []string{"listen", "watch"},
-				Usage:   "listens to clipboard",
+				Usage:   "Start listening to clipboard",
 				Action: func(cCtx *cli.Context) error {
 					listenToClipboard()
 					return nil
@@ -41,6 +41,15 @@ func main() {
 				Usage:   "Lists history of saved urls",
 				Action: func(ctx *cli.Context) error {
 					urlHistory()
+					return nil
+				},
+			},
+			{
+				Name:    "clean",
+				Aliases: []string{},
+				Usage:   "Removes all saved urls",
+				Action: func(ctx *cli.Context) error {
+					cleanHistory()
 					return nil
 				},
 			},
@@ -168,4 +177,14 @@ func urlHistory() {
 	if err == nil && len(f) > 0 {
 		fmt.Print(string(f))
 	}
+}
+
+func cleanHistory() {
+	setupDirectory()
+
+	path := filepath.Join(getDirectoryPath(), "urls.txt")
+
+	f, _ := os.Create(path)
+
+	defer f.Close()
 }
