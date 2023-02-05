@@ -3,15 +3,41 @@ package main
 import (
 	"bytes"
 	"fmt"
+	"log"
 	"os"
 	"path/filepath"
 	"regexp"
 	"time"
 
+	"github.com/urfave/cli/v2"
 	"golang.design/x/clipboard"
 )
 
 func main() {
+	app := &cli.App{
+		Name:  "clipboard-url-saver",
+		Usage: "automatically saves urls found in clipboard",
+		Commands: []*cli.Command{
+			{
+				Name:    "start",
+				Aliases: []string{"listen", "watch"},
+				Usage:   "listens to clipboard",
+				Action: func(cCtx *cli.Context) error {
+					listenToClipboard()
+					return nil
+				},
+			},
+		},
+	}
+
+	if err := app.Run(os.Args); err != nil {
+		log.Fatal(err)
+	}
+}
+
+func listenToClipboard() {
+	fmt.Println("Listening to clipboard")
+
 	err := clipboard.Init()
 
 	if err != nil {
