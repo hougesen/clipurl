@@ -17,7 +17,7 @@ import (
 
 func main() {
 	app := &cli.App{
-		Name:  "clipboard-url-saver",
+		Name:  "clipurl",
 		Usage: "automatically saves urls found in clipboard",
 		Authors: []*cli.Author{
 			{
