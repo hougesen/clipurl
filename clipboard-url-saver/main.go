@@ -2,6 +2,9 @@ package main
 
 import (
 	"fmt"
+	"os"
+	"regexp"
+	"time"
 )
 
 func main() {
@@ -42,5 +45,19 @@ func findUrls(text string) []string {
 }
 
 func updateSavedUrls(urls []string) {
+	f, err := os.OpenFile("clipboard_urls.txt", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "error: %v\n", err)
+		os.Exit(1)
+	}
+
+	defer f.Close()
+
+	timestamp := time.Now().Unix()
+
+	for _, url := range urls {
+		f.WriteString(fmt.Sprintf("%d %s\n", timestamp, url))
+	}
 
 }
