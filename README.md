@@ -32,7 +32,7 @@ export PATH=${PATH}:$(go env GOPATH)/bin
 Start listening to the clipboard by running
 
 ```sh
-clipurl start
+$ clipurl start
 ```
 
 #### Disclaimer
@@ -41,10 +41,18 @@ The program does not automatically start on boot. If that is desired you can fol
 
 ### URL History
 
-To get a list of all found urls run
+The history command lists all found urls.
 
 ```sh
-clipurl history
+$ clipurl history
+
++------------+-----------------------------+
+| TIMESTAMP  | URL                         |
++------------+-----------------------------+
+| 1675615347 | https://mhouge.dk/          |
++------------+-----------------------------+
+| 1675615353 | https://github.com/hougesen |
++------------+-----------------------------+
 ```
 
 ### Deleting all found urls
@@ -52,5 +60,5 @@ clipurl history
 To delete all found urls run
 
 ```sh
-clipurl clean
+$ clipurl clean
 ```
