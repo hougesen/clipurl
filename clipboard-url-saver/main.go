@@ -17,6 +17,14 @@ func main() {
 	app := &cli.App{
 		Name:  "clipboard-url-saver",
 		Usage: "automatically saves urls found in clipboard",
+		Authors: []*cli.Author{
+			{
+				Name:  "Mads Hougesen",
+				Email: "mads@mhouge.dk",
+			},
+		},
+		EnableBashCompletion: true,
+		Suggest:              true,
 		Commands: []*cli.Command{
 			{
 				Name:    "start",
@@ -27,6 +35,18 @@ func main() {
 					return nil
 				},
 			},
+			{
+				Name:    "history",
+				Aliases: []string{},
+				Usage:   "Lists history of saved urls",
+				Action: func(ctx *cli.Context) error {
+					urlHistory()
+					return nil
+				},
+			},
+		},
+		CommandNotFound: func(cCtx *cli.Context, command string) {
+			fmt.Fprintf(cCtx.App.Writer, "Command %q not found.\n", command)
 		},
 	}
 
@@ -135,5 +155,17 @@ func updateSavedUrls(urls []string) {
 
 	for _, url := range urls {
 		f.WriteString(fmt.Sprintf("%d %s\n", timestamp, url))
+	}
+}
+
+func urlHistory() {
+	setupDirectory()
+
+	path := filepath.Join(getDirectoryPath(), "urls.txt")
+
+	f, err := os.ReadFile(path)
+
+	if err == nil && len(f) > 0 {
+		fmt.Print(string(f))
 	}
 }
